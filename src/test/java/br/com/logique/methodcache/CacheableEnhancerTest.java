@@ -16,17 +16,13 @@
  */
 package br.com.logique.methodcache;
 
-import java.lang.reflect.Method;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- *
- * @author Gustavo
+ * @author Gustavo Leitão
  */
 public class CacheableEnhancerTest {
 
@@ -41,7 +37,7 @@ public class CacheableEnhancerTest {
 
     @Test
     public void testNewInstance() {
-        int result = enhanceTest.doSomething(10);
+        int result = enhanceTest.multiplier(10, 2);
         assertEquals(20, result);
     }
 

@@ -21,11 +21,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Save the Method and all paramters
+ * Save the method and all parameters.
+ *
  * @author Gustavo Leitão
  */
 public class MethodParamter {
-    
+
     private final Method method;
     private final Object[] paramters;
 
@@ -33,8 +34,8 @@ public class MethodParamter {
         this.method = method;
         this.paramters = paramters;
     }
-    
-    public static MethodParamter of(Method method, Object[] paramtes){
+
+    public static MethodParamter of(Method method, Object[] paramtes) {
         return new MethodParamter(method, paramtes);
     }
 
@@ -63,5 +64,5 @@ public class MethodParamter {
         }
         return true;
     }
-    
+
 }

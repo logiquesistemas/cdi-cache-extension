@@ -19,7 +19,7 @@ package br.com.logique.methodcache;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Store a time duration with amount and time unit.
+ * Save a time duration with amount and time unit.
  *
  * @author Gustavo Leitão
  */

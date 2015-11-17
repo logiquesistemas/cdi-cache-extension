@@ -17,8 +17,6 @@
 package br.com.logique.methodcache;
 
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of InterfaceProxyTest to test the cache proxy.
@@ -27,16 +25,14 @@ import org.slf4j.LoggerFactory;
  */
 public class InterfaceProxyTestImpl implements InterfaceProxyTest {
 
-    private Logger logger = LoggerFactory.getLogger(InterfaceProxyTestImpl.class);
-
     @Cacheable(lifeTime = 30, unit = TimeUnit.SECONDS)
     @Override
-    public int doSomething(int arg) {
+    public int multiplier(int value, int multiplier) {
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException ex) {
         }
-        return arg * 2;
+        return value * multiplier;
     }
 
 }

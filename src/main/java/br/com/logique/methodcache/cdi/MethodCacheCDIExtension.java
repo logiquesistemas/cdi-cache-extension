@@ -26,7 +26,7 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import java.util.Set;
 
 /**
- * CDI Extension to override the instantiation behavior od chaded classes.
+ * CDI Extension to override the instantiation behavior of cached classes.
  *
  * Created by Gustavo on 12/11/2015.
  */

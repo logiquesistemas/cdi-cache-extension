@@ -10,10 +10,10 @@ import java.rmi.Remote;
 
 /**
  * Wrap two class in just one
- * @author Gustavo Leitão
+ *
  * @param <F> type os the first class
  * @param <S> type of the second class
- * 
+ * @author Gustavo Leitão
  */
 public class Pair<F, S> implements Comparable<Pair<F, S>>, Serializable, Remote {
 

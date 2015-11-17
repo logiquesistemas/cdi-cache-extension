@@ -17,12 +17,12 @@
 package br.com.logique.methodcache;
 
 /**
- * A innterface to test proxy cache.
+ * A interface to test proxy cache.
  *
- * @author Gustavo
+ * @author Gustavo Leitão
  */
 public interface InterfaceProxyTest {
 
-    int doSomething(int arg);
+    int multiplier(int value, int multiplier);
 
 }

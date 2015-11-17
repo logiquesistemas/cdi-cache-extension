@@ -23,8 +23,8 @@ import java.lang.annotation.Target;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Annotation to activate and inform cache paramters.
- * 
+ * Annotation to activate and inform cache parameters.
+ *
  * @author Gustavo Leitão
  */
 @Retention(RetentionPolicy.RUNTIME)

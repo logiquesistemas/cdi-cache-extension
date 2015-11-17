@@ -25,7 +25,7 @@ import java.util.Set;
 
 /**
  * Override injection target producing wrapped instances.
- *
+ * <p>
  * Created by Gustavo on 16/11/2015.
  */
 public class CacheInjectionTarget<X> implements InjectionTarget<X> {

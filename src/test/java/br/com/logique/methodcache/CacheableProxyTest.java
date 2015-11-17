@@ -18,11 +18,11 @@ package br.com.logique.methodcache;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- *
- * @author Gustavo
+ * @author Gustavo Leitão
  */
 public class CacheableProxyTest {
 
@@ -37,7 +37,7 @@ public class CacheableProxyTest {
 
     @Test
     public void testNewInstance() {
-        int result = interfaceProxyTest.doSomething(10);
+        int result = interfaceProxyTest.multiplier(10, 2);
         assertEquals(20, result);
     }
 

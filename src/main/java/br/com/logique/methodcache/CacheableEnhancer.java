@@ -18,18 +18,19 @@ package br.com.logique.methodcache;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
 /**
- * A enhancer to interceps method calls.
+ * A enhancer to intercepts method calls.
  *
  * @author Gustavo Leitão
  */
