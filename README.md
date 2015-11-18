@@ -3,7 +3,7 @@ An extension CDI for cache method results.
 
 ##How to use
 
-Simply add the Cacheable annotation above the method and
+Simply add the @Cacheable annotation on method and
 inject the bean normally.
 
 ```java
