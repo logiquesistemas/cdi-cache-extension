@@ -1,5 +1,5 @@
 # CDI Cache Extension
-An extension CDI for cache methods results.
+An extension CDI for cache method results.
 
 ##How to use
 
