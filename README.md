@@ -1,5 +1,5 @@
 # CDI Cache Extension
-An extension CDI for cache the results of the methods
+An extension CDI for cache methods results.
 
 ##How to use
 
@@ -7,7 +7,6 @@ Simply add the Cacheable annotation above the method and
 inject the bean normally.
 
 ```java
-
 import java.util.concurrent.TimeUnit;
 import br.com.logique.methodcache.Cacheable;
 
@@ -17,7 +16,7 @@ public class MyBean{
     void doSomething(String arg) {
         //do something slow
     }
-
+    
 }
 
 ```

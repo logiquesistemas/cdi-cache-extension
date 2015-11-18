@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheableProxy implements InvocationHandler {
 
     private final Object proxyableObject;
-    private final Map<MethodParamter, Supplier<Object>> suplierMap = new HashMap<>();
+    private final Map<MethodParameter, Supplier<Object>> suplierMap = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(CacheableEnhancer.class);
 
     private CacheableProxy(Object obj) {
@@ -51,7 +51,7 @@ public class CacheableProxy implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        MethodParamter pair = MethodParamter.of(method, args);
+        MethodParameter pair = MethodParameter.of(proxy.getClass(), method, args);
         System.out.println("chamou o proxy...");
         if (!suplierMap.containsKey(pair)) {
             criarSuplier(proxy, method, args);
@@ -89,7 +89,7 @@ public class CacheableProxy implements InvocationHandler {
                 return null;
             }
         }, duration.getLifeTime(), duration.getTimeUnit());
-        suplierMap.put(MethodParamter.of(method, args), suplier);
+        suplierMap.put(MethodParameter.of(proxy.getClass(), method, args), suplier);
     }
 
     private Cacheable getAnnotation(Method method) {

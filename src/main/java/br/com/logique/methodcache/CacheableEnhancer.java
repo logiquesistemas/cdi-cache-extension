@@ -22,7 +22,6 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -37,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class CacheableEnhancer implements InvocationHandler {
 
     private final Object proxyableObject;
-    private final static Map<MethodParamter, Supplier<Object>> CACHES = new ConcurrentHashMap<>();
+    private final static Map<MethodParameter, Supplier<Object>> CACHES = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(CacheableEnhancer.class);
 
     private CacheableEnhancer(Object obj) {
@@ -53,17 +52,16 @@ public class CacheableEnhancer implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        MethodParamter pair = MethodParamter.of(method, args);
+        MethodParameter pair = MethodParameter.of(proxy.getClass(), method, args);
         logger.trace("invoking a method {} of {} proxy.", method.getName(), proxy);
         if (!CACHES.containsKey(pair)) {
             createCache(proxy, method, args);
         }
-        Supplier<Object> suplier = CACHES.get(pair);
-        return suplier.get();
+        return CACHES.get(pair).get();
     }
 
     private void createCache(Object proxy, final Method method, final Object[] args) {
-        logger.trace("creating cache suplier to method {} of proxy {}", method.getName(), proxy);
+        logger.trace("creating cache supplier to method {} of proxy {}", method.getName(), proxy);
         Duration duration = getDuration(method);
         Supplier<Object> suplier = Suppliers.memoizeWithExpiration(new Supplier<Object>() {
             @Override
@@ -78,7 +76,8 @@ public class CacheableEnhancer implements InvocationHandler {
             }
         }, duration.getLifeTime(), duration.getTimeUnit());
 
-        CACHES.put(MethodParamter.of(method, args), Suppliers.synchronizedSupplier(suplier));
+        CACHES.put(MethodParameter.of(proxy.getClass(), method, args),
+                Suppliers.synchronizedSupplier(suplier));
     }
 
     private Duration getDuration(Method method) {
