@@ -16,23 +16,13 @@
  */
 package br.com.logique.methodcache;
 
-import java.util.concurrent.TimeUnit;
+import com.google.common.base.Supplier;
 
 /**
- * Implementation of InterfaceProxyTest to test the cache proxy.
+ * Interface to organize suppliers cache.
  *
- * @author Gustavo Leitão
+ * Created by Gustavo Leitão
  */
-public class InterfaceProxyTestImpl implements InterfaceProxyTest {
-
-    @Cacheable(lifeTime = 30, unit = TimeUnit.SECONDS)
-    @Override
-    public int multiplier(int value, int multiplier) {
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException ex) {
-        }
-        return value * multiplier;
-    }
+public interface SupplierCache extends Cache<MethodParameter,Supplier<Object>> {
 
 }

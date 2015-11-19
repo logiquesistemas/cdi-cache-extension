@@ -16,17 +16,12 @@
  */
 package br.com.logique.methodcache;
 
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.lang.reflect.InvocationTargetException;
+
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A enhancer to intercepts method calls.
@@ -36,8 +31,8 @@ import java.util.concurrent.TimeUnit;
 public class CacheableEnhancer implements InvocationHandler {
 
     private final Object proxyableObject;
-    private final static Map<MethodParameter, Supplier<Object>> CACHES = new ConcurrentHashMap<>();
-    private final Logger logger = LoggerFactory.getLogger(CacheableEnhancer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CacheableEnhancer.class);
+    private static final SupplierCache CACHE = SupplierLocateService.getSupplierCache();
 
     private CacheableEnhancer(Object obj) {
         this.proxyableObject = obj;
@@ -50,61 +45,19 @@ public class CacheableEnhancer implements InvocationHandler {
         return enhancer.create();
     }
 
+    public static void invalidAllCache(){
+        CACHE.clearAll();
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        MethodParameter pair = MethodParameter.of(proxy.getClass(), method, args);
+        MethodParameter methodParameter = MethodParameter.of(proxyableObject.getClass(), method, args);
         logger.trace("invoking a method {} of {} proxy.", method.getName(), proxy);
-        if (!CACHES.containsKey(pair)) {
-            createCache(proxy, method, args);
+        if (!CACHE.containsKey(methodParameter)) {
+            CACHE.put(methodParameter, SupplierFactory.getSupplier(proxyableObject, method, args));
         }
-        return CACHES.get(pair).get();
+        return CACHE.get(methodParameter).get();
     }
 
-    private void createCache(Object proxy, final Method method, final Object[] args) {
-        logger.trace("creating cache supplier to method {} of proxy {}", method.getName(), proxy);
-        Duration duration = getDuration(method);
-        Supplier<Object> suplier = Suppliers.memoizeWithExpiration(new Supplier<Object>() {
-            @Override
-            public Object get() {
-                try {
-                    method.setAccessible(Boolean.TRUE);
-                    return method.invoke(proxyableObject, args);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                    logger.error("Failed to invoke method {} of proxy {}", method.getName(), proxy, ex);
-                }
-                return null;
-            }
-        }, duration.getLifeTime(), duration.getTimeUnit());
 
-        CACHES.put(MethodParameter.of(proxy.getClass(), method, args),
-                Suppliers.synchronizedSupplier(suplier));
-    }
-
-    private Duration getDuration(Method method) {
-        Cacheable annotation = getAnnotation(method);
-        int lifeTime;
-        TimeUnit unit;
-        if (annotation == null) {
-            lifeTime = 1;
-            unit = TimeUnit.MILLISECONDS;
-        } else {
-            lifeTime = annotation.lifeTime();
-            unit = annotation.unit();
-        }
-        return Duration.withLifetime(lifeTime, unit);
-    }
-
-    private Cacheable getAnnotation(Method method) {
-        Cacheable annotation = null;
-        try {
-            Method classMethod = proxyableObject.getClass().getMethod(method.getName(), method.getParameterTypes());
-            annotation = classMethod.getDeclaredAnnotation(Cacheable.class);
-            if (annotation == null) {
-                annotation = method.getDeclaredAnnotation(Cacheable.class);
-            }
-        } catch (NoSuchMethodException | SecurityException ex) {
-            logger.error("Failed to get Cacheable Annotation from {}", method.getName(), ex);
-        }
-        return annotation;
-    }
 }

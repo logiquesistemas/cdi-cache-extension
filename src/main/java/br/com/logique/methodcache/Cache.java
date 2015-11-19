@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Gustavo
+ * Copyright (C) 2015 Logique Sistemas
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,19 @@
  */
 package br.com.logique.methodcache;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-
 /**
- * @author Gustavo Leitão
+ * Interface to organize cache methods.
+ *
+ * Created by Gustavo on 19/11/2015.
  */
-public class CacheableProxyTest {
+public interface Cache<K,V> {
 
-    private InterfaceProxyTest interfaceProxyTest;
-    private InterfaceProxyTest realImplementation;
+    void put(K key, V value);
 
-    @Before
-    public void setUp() {
-        realImplementation = new InterfaceProxyTestImpl();
-        interfaceProxyTest = (InterfaceProxyTest) CacheableProxy.newInstance(realImplementation);
-    }
+    V get(K key);
 
-    @Test
-    public void testNewInstance() {
-        int result = interfaceProxyTest.multiplier(10, 2);
-        assertEquals(20, result);
-    }
+    boolean containsKey(K key);
+
+    void clearAll();
 
 }

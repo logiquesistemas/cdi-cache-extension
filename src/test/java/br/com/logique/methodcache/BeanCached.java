@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Gustavo
+ * Copyright (C) 2015 Logique Sistemas
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,22 @@
  */
 package br.com.logique.methodcache;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import java.util.concurrent.TimeUnit;
 
 /**
+ * Implementation of Interface to test the cache proxy.
+ *
  * @author Gustavo Leitão
  */
-public class CacheableEnhancerTest {
+public class BeanCached {
 
-    private InterfaceProxyTestImpl enhanceTest;
-    private InterfaceProxyTestImpl realImplementation;
-
-    @Before
-    public void setUp() {
-        realImplementation = new InterfaceProxyTestImpl();
-        enhanceTest = (InterfaceProxyTestImpl) CacheableEnhancer.newInstance(realImplementation);
-    }
-
-    @Test
-    public void testNewInstance() {
-        int result = enhanceTest.multiplier(10, 2);
-        assertEquals(20, result);
+    @Cacheable(lifeTime = 2, unit = TimeUnit.SECONDS)
+    public double pow2(int param1, int executionMs) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(executionMs);
+        } catch (InterruptedException ex) {
+        }
+        return Math.pow(param1, 2);
     }
 
 }

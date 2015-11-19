@@ -16,13 +16,16 @@
  */
 package br.com.logique.methodcache;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * A interface to test proxy cache.
  *
  * @author Gustavo Leitão
  */
-public interface InterfaceProxyTest {
+public interface Interface {
 
-    int multiplier(int value, int multiplier);
+    @Cacheable(unit = TimeUnit.SECONDS, lifeTime = 5)
+    double pow2(int value, int timeMs);
 
 }
