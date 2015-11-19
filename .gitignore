@@ -34,9 +34,6 @@
 
 # IntelliJ
 /out/
-.idea/
-*.iml
-*.iws
 
 # Eclipse
 .classpath
@@ -47,6 +44,8 @@
 .DS_Store
 
 # mpeltonen/sbt-idea plugin
+/.idea/uiDesigner.xml
+/cdi-cache-extension.iml
 .idea_modules/
 
 # JIRA plugin
