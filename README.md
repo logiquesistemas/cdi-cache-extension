@@ -1,13 +1,13 @@
 # CDI Cache Extension
-An extension CDI for cache method results.
+A simple extension CDI for cache method results using guava cache.
 
 ##How to use
 
 Simply add the @TimedCache or @EternalCache annotation on method to be cached. 
 It is necessary that the method has some return to be cached. CDI Cache Extension will have no effect on methods with void returns.
 
-The ```java @TimedCache``` will cache the result of the method with the specific parameters for the given time. After that time expires the next method call will
-update the cache again. On the other hand , The ```java @EternalCache``` will cache the result of the method forever. So , the next call to the method with the same parameters will return the result immediately.
+The @TimedCache will cache the result of the method with the specific parameters for the given time. After that time expires the next method call will
+update the cache again. On the other hand , The @EternalCache will cache the result of the method forever. So , the next call to the method with the same parameters will return the result immediately.
 
 ```java
 import java.util.concurrent.TimeUnit;
@@ -47,7 +47,6 @@ public class CacheTest{
 }
 
 ```
-
 ### Java SE Projects
 
 It is also possible to use CDI Cache Extension in a non CDI project. However in this case is necessary to create the proxy instance manually:
