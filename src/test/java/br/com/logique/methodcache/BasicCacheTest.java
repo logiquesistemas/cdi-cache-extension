@@ -35,8 +35,8 @@ public class BasicCacheTest {
     @Before
     public void setUp() {
         realImplementation = new BeanCached();
-        enhanceTest = (BeanCached) CacheableEnhancer.newInstance(realImplementation);
-        CacheableEnhancer.invalidAllCache();
+        enhanceTest = (BeanCached) CacheEnhancer.newInstance(realImplementation);
+        CacheEnhancer.invalidAllCache();
     }
 
     @Test

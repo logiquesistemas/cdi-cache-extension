@@ -7,24 +7,24 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Gustavo on 19/11/2015.
+ * Created by Gustavo on 21/11/2015.
  */
-public class InterfaceTest {
+public class BasicEternalCacheTest {
 
-    private Interface interfaceCached;
-    private Interface interfaceImpl;
+    private BeanEternalCached enhanceTest;
+    private BeanEternalCached realImplementation;
 
     @Before
     public void setUp() {
-        interfaceImpl = new InterfaceImpl01();
-        interfaceCached = (Interface) CacheEnhancer.newInstance(interfaceImpl);
+        realImplementation = new BeanEternalCached();
+        enhanceTest = (BeanEternalCached) CacheEnhancer.newInstance(realImplementation);
         CacheEnhancer.invalidAllCache();
     }
 
     @Test
     public void sameResult() {
-        double result = interfaceCached.pow2(10, 0);
-        double resultReal = interfaceImpl.pow2(10, 0);
+        double result = enhanceTest.sin(10, 0);
+        double resultReal = realImplementation.sin(10, 0);
         assertEquals(resultReal, result, 0.001);
     }
 
@@ -39,10 +39,9 @@ public class InterfaceTest {
 
     private long callAndGetTime(int param1, int executionTime){
         long t1 = System.currentTimeMillis();
-        interfaceCached.pow2(param1, executionTime);
+        enhanceTest.sin(param1, executionTime);
         long t2 = System.currentTimeMillis();
         return t2-t1;
     }
-
 
 }

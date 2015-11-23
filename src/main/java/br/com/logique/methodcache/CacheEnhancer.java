@@ -28,20 +28,20 @@ import java.lang.reflect.Method;
  *
  * @author Gustavo Leitão
  */
-public class CacheableEnhancer implements InvocationHandler {
+public class CacheEnhancer implements InvocationHandler {
 
     private final Object proxyableObject;
-    private static final Logger logger = LoggerFactory.getLogger(CacheableEnhancer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CacheEnhancer.class);
     private static final SupplierCache CACHE = SupplierLocateService.getSupplierCache();
 
-    private CacheableEnhancer(Object obj) {
+    private CacheEnhancer(Object obj) {
         this.proxyableObject = obj;
     }
 
     public static Object newInstance(Object obj) {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(obj.getClass());
-        enhancer.setCallback(new CacheableEnhancer(obj));
+        enhancer.setCallback(new CacheEnhancer(obj));
         return enhancer.create();
     }
 
@@ -58,6 +58,5 @@ public class CacheableEnhancer implements InvocationHandler {
         }
         return CACHE.get(methodParameter).get();
     }
-
 
 }

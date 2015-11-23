@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * Created by Gustavo Leitão
  */
-@ApplicationScoped
 public class SupplierCacheImpl implements SupplierCache {
 
     private Map<MethodParameter,Supplier<Object>> cache = new ConcurrentHashMap<>();

@@ -14,21 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.logique.methodcache;
+package br.com.logique.methodcache.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Locate Service for supplier cache.
+ * Annotation to activate and inform timed cache parameters.
  *
- * Created by Gustavo Leitão on 19/11/2015.
+ * @author Gustavo Leitão
  */
-public class SupplierLocateService {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface TimedCache {
 
-    /**
-     * Get supplier cache to be used.
-     * @return supplier cache
-     */
-    public static SupplierCache getSupplierCache(){
-        return new SupplierCacheImpl();
-    }
+    int lifeTime();
+
+    TimeUnit unit();
 
 }

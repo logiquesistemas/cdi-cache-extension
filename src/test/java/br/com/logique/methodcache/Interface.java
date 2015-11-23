@@ -16,6 +16,8 @@
  */
 package br.com.logique.methodcache;
 
+import br.com.logique.methodcache.annotations.TimedCache;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,7 +27,10 @@ import java.util.concurrent.TimeUnit;
  */
 public interface Interface {
 
-    @Cacheable(unit = TimeUnit.SECONDS, lifeTime = 5)
+    @TimedCache(unit = TimeUnit.SECONDS, lifeTime = 5)
     double pow2(int value, int timeMs);
+
+    @TimedCache(unit = TimeUnit.SECONDS, lifeTime = 5)
+    double sin(int value, int timeMs);
 
 }

@@ -14,25 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package br.com.logique.methodcache;
+package br.com.logique.methodcache.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.concurrent.TimeUnit;
 
 /**
- * Annotation to activate and inform cache parameters.
+ * Annotation to activate eternal cache.
  *
- * @author Gustavo Leitão
+ * Created by Gustavo on 21/11/2015.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Cacheable {
-
-    int lifeTime();
-
-    TimeUnit unit();
+public @interface EternalCache {
 
 }

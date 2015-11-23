@@ -16,7 +16,7 @@
  */
 package br.com.logique.methodcache.cdi;
 
-import br.com.logique.methodcache.CacheableEnhancer;
+import br.com.logique.methodcache.CacheEnhancer;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -63,7 +63,7 @@ public class CacheInjectionTarget<X> implements InjectionTarget<X> {
 
     @Override
     public X produce(CreationalContext<X> ctx) {
-        return (X) CacheableEnhancer.newInstance(it.produce(ctx));
+        return (X) CacheEnhancer.newInstance(it.produce(ctx));
     }
 }
 

@@ -16,19 +16,21 @@
  */
 package br.com.logique.methodcache;
 
+import br.com.logique.methodcache.annotations.TimedCache;
+import br.com.logique.methodcache.annotations.EternalCache;
+import br.com.logique.methodcache.util.AnnotationUtil;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.AnnotationUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
 /**
- * Supplier Factory.
+ * Method supplier factory.
  *
  * Created by Gustavo Leitão on 19/11/2015.
  */
@@ -39,60 +41,57 @@ public class SupplierFactory {
     /**
      * Create new timed supplier.
      *
-     * @param proxy Class instance to be chached
+     * @param proxy  Class instance to be cached
      * @param method method to be cached
-     * @param args method args
+     * @param args   method args
      * @return new supplier
      */
-    public static Supplier<Object> getSupplier(Object proxy, final Method method, final Object[] args){
-
+    public static Supplier<Object> getSupplier(Object proxy, final Method method, final Object[] args) {
         LOGGER.trace("creating CACHE supplier to method {} of proxy {}", method.getName(), proxy);
-        Duration duration = getDuration(proxy, method);
-        com.google.common.base.Supplier<Object> supplier = Suppliers.memoizeWithExpiration(new com.google.common.base.Supplier<Object>() {
-            @Override
-            public Object get() {
-                try {
-                    method.setAccessible(Boolean.TRUE);
-                    return method.invoke(proxy, args);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                    LOGGER.error("Failed to invoke method {} of proxy {}", method.getName(), proxy, ex);
-                }
-                return null;
-            }
-        },duration.getLifeTime(), duration.getTimeUnit());
-
+        Supplier<Object> supplier = getSupplierByType(proxy, method, args);
         return supplier;
     }
 
-    private static Duration getDuration(Object proxy, Method method) {
-        Cacheable annotation = getAnnotation(proxy, method);
+    private static Supplier<Object> getSupplierByType(Object proxy, Method method, Object[] args) {
+        Supplier<Object> supplier = null;
+        Optional<TimedCache> timedAnnotation = AnnotationUtil.getAnnotation(proxy, method, TimedCache.class);
+
+        if (timedAnnotation.isPresent()) {
+            supplier = getTimedSupplier(timedAnnotation, proxy, method, args);
+        } else {
+            Optional<EternalCache> eternalAnnotation = AnnotationUtil.getAnnotation(proxy, method, EternalCache.class);
+            if (eternalAnnotation.isPresent()) {
+                supplier = getEternalSupplier(proxy, method, args);
+            }
+        }
+        return supplier;
+    }
+
+    private static Supplier<Object> getEternalSupplier(final Object proxy, final Method method, final Object[] args) {
+        return Suppliers.memoize(MethodSupplier.of(proxy, method, args));
+    }
+
+    private static Supplier<Object> getTimedSupplier(Optional<TimedCache> annotation, final Object proxy, final Method method, final Object[] args) {
+        Duration duration = getDuration(annotation);
+        return Suppliers.memoizeWithExpiration(MethodSupplier.of(proxy, method, args),
+                duration.getLifeTime(), duration.getTimeUnit());
+    }
+
+    private static Duration getDuration(Optional<TimedCache> annotation) {
+
         int lifeTime;
         TimeUnit unit;
-        if (annotation == null) {
+
+        if (annotation.isPresent()) {
+            lifeTime = annotation.get().lifeTime();
+            unit = annotation.get().unit();
+        } else {
             lifeTime = 1;
             unit = TimeUnit.MILLISECONDS;
-        } else {
-            lifeTime = annotation.lifeTime();
-            unit = annotation.unit();
         }
+
         return Duration.withLifetime(lifeTime, unit);
     }
 
-    private static Cacheable getAnnotation(Object proxy, Method method) {
-        Cacheable annotation = null;
-
-        try {
-            Method classMethod = proxy.getClass().getMethod(method.getName(), method.getParameterTypes());
-            annotation = classMethod.getDeclaredAnnotation(Cacheable.class);
-            if (annotation == null) {
-                //annotation = method.getDeclaredAnnotation(Cacheable.class);
-                annotation = AnnotationUtils.findAnnotation(classMethod, Cacheable.class);
-            }
-
-        } catch (NoSuchMethodException | SecurityException ex) {
-            LOGGER.error("Failed to get Cacheable Annotation from {}", method.getName(), ex);
-        }
-        return annotation;
-    }
 
 }

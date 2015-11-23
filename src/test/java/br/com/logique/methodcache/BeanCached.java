@@ -16,6 +16,8 @@
  */
 package br.com.logique.methodcache;
 
+import br.com.logique.methodcache.annotations.TimedCache;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class BeanCached {
 
-    @Cacheable(lifeTime = 2, unit = TimeUnit.SECONDS)
+    @TimedCache(lifeTime = 2, unit = TimeUnit.SECONDS)
     public double pow2(int param1, int executionMs) {
         try {
             TimeUnit.MILLISECONDS.sleep(executionMs);

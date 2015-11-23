@@ -16,7 +16,8 @@
  */
 package br.com.logique.methodcache.cdi;
 
-import br.com.logique.methodcache.Cacheable;
+import br.com.logique.methodcache.annotations.TimedCache;
+import br.com.logique.methodcache.annotations.EternalCache;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AnnotatedMethod;
@@ -33,7 +34,7 @@ import java.util.Set;
 public class MethodCacheCDIExtension implements Extension {
 
     /**
-     * Find any method with {@code Cacheable} annotation to override the injection target.
+     * Find any method with {@code TimedCache} annotation to override the injection target.
      *
      * @param pit event to observe
      * @param <X> type of event observed
@@ -42,11 +43,16 @@ public class MethodCacheCDIExtension implements Extension {
         AnnotatedType<X> at = pit.getAnnotatedType();
         Set<AnnotatedMethod<? super X>> methods = at.getMethods();
         for (AnnotatedMethod<? super X> method : methods) {
-            if (method.isAnnotationPresent(Cacheable.class)) {
+            if (isCachedAnnotationPresent(method)) {
                 changeInjectionTarget(pit);
                 break;
             }
         }
+    }
+
+    private <X> boolean isCachedAnnotationPresent(AnnotatedMethod<? super X> method) {
+        return method.isAnnotationPresent(TimedCache.class)
+                || method.isAnnotationPresent(EternalCache.class);
     }
 
     private <X> void changeInjectionTarget(ProcessInjectionTarget<X> pit) {
