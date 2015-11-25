@@ -12,11 +12,11 @@ import javax.inject.Inject;
  * Created by Gustavo on 17/11/2015.
  */
 @RunWith(CdiRunner.class)
-@AdditionalClasses(BeanCached.class)
+@AdditionalClasses(BeanTimedCache.class)
 public class CDICacheTest {
 
     @Inject
-    private BeanCached realImplementation;
+    private BeanTimedCache realImplementation;
 
     @Test
     public void cdiInjection() {

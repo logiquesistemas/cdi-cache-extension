@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Gustavo Leitão
  */
-public class BeanCached {
+public class BeanTimedCache {
 
     @TimedCache(lifeTime = 2, unit = TimeUnit.SECONDS)
     public double pow2(int param1, int executionMs) {

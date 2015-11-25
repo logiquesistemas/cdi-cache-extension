@@ -29,13 +29,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class BasicCacheTest {
 
-    private BeanCached enhanceTest;
-    private BeanCached realImplementation;
+    private BeanTimedCache enhanceTest;
+    private BeanTimedCache realImplementation;
 
     @Before
     public void setUp() {
-        realImplementation = new BeanCached();
-        enhanceTest = (BeanCached) CacheEnhancer.newInstance(realImplementation);
+        realImplementation = new BeanTimedCache();
+        enhanceTest = (BeanTimedCache) CacheEnhancer.newInstance(realImplementation);
         CacheEnhancer.invalidAllCache();
     }
 
@@ -72,6 +72,16 @@ public class BasicCacheTest {
         long time2 = callAndGetTime(10, executionTime);
         Assert.assertTrue((time1) >= executionTime);
         Assert.assertTrue((time2) >= executionTime);
+    }
+
+    @Test
+    public void recallAfterTimeExpiration() throws InterruptedException {
+        int executionTime = 250;
+        callAndGetTime(10, executionTime);
+        TimeUnit.MILLISECONDS.sleep(2500);
+        callAndGetTime(10, executionTime);
+        long time3 = callAndGetTime(10, executionTime);
+        Assert.assertTrue((time3) < executionTime);
     }
 
     private long callAndGetTime(int param1, int executionTime){

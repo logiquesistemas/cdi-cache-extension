@@ -16,6 +16,7 @@
  */
 package br.com.logique.methodcache;
 
+import com.google.common.base.Supplier;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InvocationHandler;
 import org.slf4j.Logger;
@@ -53,10 +54,19 @@ public class CacheEnhancer implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         MethodParameter methodParameter = MethodParameter.of(proxyableObject.getClass(), method, args);
         logger.trace("invoking a method {} of {} proxy.", method.getName(), proxy);
-        if (!CACHE.containsKey(methodParameter)) {
-            CACHE.put(methodParameter, SupplierFactory.getSupplier(proxyableObject, method, args));
+        Object retorno;
+
+        Supplier<Object> supplier = CACHE.get(methodParameter);
+
+        if (supplier == null){
+            supplier = SupplierFactory.getSupplier(proxyableObject, method, args);
+            retorno = supplier.get();
+            CACHE.put(methodParameter, supplier);
+        }else{
+            retorno = supplier.get();
         }
-        return CACHE.get(methodParameter).get();
+
+        return retorno;
     }
 
 }

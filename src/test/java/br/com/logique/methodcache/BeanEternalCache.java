@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Gustavo on 21/11/2015.
  */
-public class BeanEternalCached {
+public class BeanEternalCache {
 
     @EternalCache
     public double sin(int param1, int executionMs) {

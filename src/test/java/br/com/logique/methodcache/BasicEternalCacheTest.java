@@ -11,13 +11,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class BasicEternalCacheTest {
 
-    private BeanEternalCached enhanceTest;
-    private BeanEternalCached realImplementation;
+    private BeanEternalCache enhanceTest;
+    private BeanEternalCache realImplementation;
 
     @Before
     public void setUp() {
-        realImplementation = new BeanEternalCached();
-        enhanceTest = (BeanEternalCached) CacheEnhancer.newInstance(realImplementation);
+        realImplementation = new BeanEternalCache();
+        enhanceTest = (BeanEternalCache) CacheEnhancer.newInstance(realImplementation);
         CacheEnhancer.invalidAllCache();
     }
 

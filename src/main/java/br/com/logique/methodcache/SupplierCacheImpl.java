@@ -17,11 +17,9 @@
 package br.com.logique.methodcache;
 
 
+import br.com.logique.methodcache.util.PropertiesUtil;
 import com.google.common.base.Supplier;
-
-import javax.enterprise.context.ApplicationScoped;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.google.common.cache.CacheBuilder;
 
 /**
  * Interface to supplier cache.
@@ -30,7 +28,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class SupplierCacheImpl implements SupplierCache {
 
-    private Map<MethodParameter,Supplier<Object>> cache = new ConcurrentHashMap<>();
+    private static int LIMIT_CACHE = PropertiesUtil.getIntProperty("cdi-cache.max_size", 10000);
+
+    private com.google.common.cache.Cache<MethodParameter, Supplier<Object>> cache = CacheBuilder.newBuilder()
+            .maximumSize(LIMIT_CACHE)
+            .build();
 
     @Override
     public void put(MethodParameter key, Supplier<Object> value) {
@@ -39,16 +41,17 @@ public class SupplierCacheImpl implements SupplierCache {
 
     @Override
     public Supplier<Object> get(MethodParameter key) {
-        return cache.get(key);
+        return cache.getIfPresent(key);
     }
 
     @Override
     public boolean containsKey(MethodParameter key) {
-        return cache.containsKey(key);
+        return cache.getIfPresent(key) != null;
     }
 
     @Override
     public void clearAll() {
-        cache.clear();
+        cache.invalidateAll();
     }
+
 }
