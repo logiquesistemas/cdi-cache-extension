@@ -62,4 +62,28 @@ public class CacheTest{
     }
     
 }
+```
 
+### Options 
+
+If you need to limit the maximum number of entries in main cache you need change the value of property called "cdi-cache.max_size". 
+For default the main cache is unlimited.
+
+You can do this setting the property during startup of your application:
+
+```java
+    System.setProperty("cdi-cache.max_size",10000);
+```
+
+Or as a parameter in java exec command:
+ 
+```java
+   java -jar -Dcdi-cache.max_size=10000 MyApp.jar
+``` 
+    
+
+
+
+
+  
+ 

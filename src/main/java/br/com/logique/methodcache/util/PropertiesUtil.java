@@ -5,8 +5,8 @@ package br.com.logique.methodcache.util;
  */
 public class PropertiesUtil {
 
-    public static int getIntProperty(String key, int defaultValue) {
-        return Integer.parseInt(System.getProperty(key, String.valueOf(defaultValue)));
+    public static long getLongProperty(String key, long defaultValue) {
+        return Long.parseLong(System.getProperty(key, String.valueOf(defaultValue)));
     }
 
 }

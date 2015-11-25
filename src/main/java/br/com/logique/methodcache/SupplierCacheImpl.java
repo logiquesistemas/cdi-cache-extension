@@ -28,7 +28,7 @@ import com.google.common.cache.CacheBuilder;
  */
 public class SupplierCacheImpl implements SupplierCache {
 
-    private static int LIMIT_CACHE = PropertiesUtil.getIntProperty("cdi-cache.max_size", 10000);
+    private static long LIMIT_CACHE = PropertiesUtil.getLongProperty("cdi-cache.max_size", Long.MAX_VALUE);
 
     private com.google.common.cache.Cache<MethodParameter, Supplier<Object>> cache = CacheBuilder.newBuilder()
             .maximumSize(LIMIT_CACHE)
